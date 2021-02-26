@@ -39,6 +39,7 @@ public class App {
                     Plant plant = new Plant(name, age, isTrimmed, isSick);
                     parkDao.create(plant);
                     System.out.println("New plant is successfully created:\n" + plant.toString());
+                    System.out.println("Anything else? Enter another command:");
 
                     break;
                 case "2":
@@ -46,12 +47,16 @@ public class App {
                     int id = Integer.parseInt(reader.readLine());
                     Plant result = parkDao.findById(id).get();
                     System.out.println("This is your plant:\n" + result.toString());
+                    System.out.println("Anything else? Enter another command:");
+
                     break;
                 case "3":
                     System.out.println("Enter id:");
                     int plantId = Integer.parseInt(reader.readLine());
                     parkDao.deleteById(plantId);
                     System.out.println("Plant with id = " + plantId + " deleted");
+                    System.out.println("Anything else? Enter another command:");
+
                     break;
                 case "4":
                     System.out.println("Enter id:");
@@ -73,6 +78,8 @@ public class App {
 
                     parkDao.update(plId, plantParams);
                     System.out.println("Update successful");
+                    System.out.println("Anything else? Enter another command:");
+
                     break;
                 case "5":
                     System.out.println("Here are all the plants:");
@@ -80,6 +87,8 @@ public class App {
                     for (Plant p : allPlants) {
                         System.out.println(p);
                     }
+                    System.out.println("Anything else? Enter another command:");
+
 
                     break;
                 case "0":
