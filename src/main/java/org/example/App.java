@@ -14,10 +14,10 @@ public class App {
         ParkDao parkDao = new ParkDao();
 
         System.out.println("Choose your action:");
-        System.out.println("1 - Create a plant");
-        System.out.println("2 - Find a plant by id");
-        System.out.println("3 - Delete a plant by id");
-        System.out.println("4 - Update a plant by id");
+        System.out.println("1 - Create plant");
+        System.out.println("2 - Find plant by id");
+        System.out.println("3 - Delete plant by id");
+        System.out.println("4 - Update plant by id");
         System.out.println("5 - List all plants");
         System.out.println("0 - Exit");
 
@@ -27,9 +27,9 @@ public class App {
 
             switch (cmd) {
                 case "1":
-                    System.out.println("Let's create a plant! Enter a name:");
+                    System.out.println("Let's create a new plant! \nEnter plant's name:");
                     String name = reader.readLine();
-                    System.out.println("Enter an age:");
+                    System.out.println("Enter age:");
                     int age = Integer.parseInt(reader.readLine());
                     System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
                     int isTrimmed = Integer.parseInt(reader.readLine());
@@ -43,7 +43,7 @@ public class App {
 
                     break;
                 case "2":
-                    System.out.println("Enter id:");
+                    System.out.println("Enter id of the plant you're looking for:");
                     int id = Integer.parseInt(reader.readLine());
                     Plant result = parkDao.findById(id).get();
                     System.out.println("This is your plant:\n" + result.toString());
@@ -51,7 +51,7 @@ public class App {
 
                     break;
                 case "3":
-                    System.out.println("Enter id:");
+                    System.out.println("Enter id of the plant you want to delete:");
                     int plantId = Integer.parseInt(reader.readLine());
                     parkDao.deleteById(plantId);
                     System.out.println("Plant with id = " + plantId + " deleted");
@@ -59,7 +59,7 @@ public class App {
 
                     break;
                 case "4":
-                    System.out.println("Enter id:");
+                    System.out.println("Enter id of the plant you want to update:");
                     int plId = Integer.parseInt(reader.readLine());
                     Map<String, String> plantParams = new HashMap<>();
                     System.out.println("You need to enter all the plant's parameters to update it.\nEnter  name:");
@@ -92,46 +92,17 @@ public class App {
 
                     break;
                 case "0":
-                    System.out.println("Okay, bye :( ");
+                    System.out.println("Okay, bye");
                     return;
 
                 default:
-                    System.out.println("Enter correct command >_<");
+                    System.out.println("Unknown command. Enter correct command from the list above:");
                     break;
             }
         }
 
-        //Plant plant = new Plant(1000, "loltree", 10000, 1, 0);
-        //parkDao.create(plant);
-        //parkDao.deleteById(1000);
-
-        //Optional<Plant> plant1000 = parkDao.findById(77777);
-
-        /*if (plant1000.isPresent()) {
-
-            System.out.println("This is your plant:");
-            System.out.println(plant1000.get());
-        } else {
-            System.out.println("Plant with id = 1000 doesn't exist");
-        }*/
-
-        //List<Plant> plants = parkDao.findAll();
-        //Map<String, String> map = new HashMap<>();
-        //map.put("name", "kektree");
-        //map.put("age", "1488");
-        //map.put("is_trimmed", "0");
-        //map.put("is_sick", "1");
-
-
-        //parkDao.update(1000, map);
-
         ConnectionUtils.closeConnection();
-        //System.out.println(plant);
 
-
-        /*for (Plant p: plants) {
-            System.out.println(p);
-        }*/
    }
 
 
