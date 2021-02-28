@@ -91,5 +91,25 @@ public class ParkDaoTest {
         }
 
 
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+        public void incorrectPlantTest() {
+        Plant incorrectPlant = new Plant("cherry tree", 213, 5, 789);
+        dao.create(incorrectPlant);
+
+    }
+
+    @Test(expectedExceptions = {IllegalArgumentException.class})
+    public void incorrectPlantUpdateTest() {
+        Map<String, String> incorrectParams = new HashMap<>();
+        incorrectParams.put("name", "cherry tree");
+        incorrectParams.put("age", "20");
+        incorrectParams.put("is_trimmed", "14");
+        incorrectParams.put("is_sick", "I'm not even a number");
+
+        dao.update(1, incorrectParams);
+
+    }
+
+
     }
 

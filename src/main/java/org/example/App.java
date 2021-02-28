@@ -32,11 +32,42 @@ public class App {
                     System.out.println("Let's create a new plant! \nEnter plant's name:");
                     String name = reader.readLine();
                     System.out.println("Enter age:");
-                    int age = Integer.parseInt(reader.readLine());
+                    Integer age = null;
+                        try {
+                            age = Integer.parseInt(reader.readLine());
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Age must be a number");
+                            return;
+                        }
+
                     System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
-                    int isTrimmed = Integer.parseInt(reader.readLine());
+                    Integer isTrimmed = null;
+                        try {
+                            isTrimmed = Integer.parseInt(reader.readLine());
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Enter a number");
+                            return;
+                        }
+
+
+                    if (isTrimmed != 0 && isTrimmed != 1) {
+                        System.out.println("Enter 0 or 1.");
+                        return;
+                    }
+
                     System.out.println("Is plant sick? \r\n1 - yes \r\n0 - no");
-                    int isSick = Integer.parseInt(reader.readLine());
+                    Integer isSick = null;
+                        try {
+                            isSick = Integer.parseInt(reader.readLine());
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Enter a number");
+                            return;
+                        }
+
+                    if (isSick != 0 && isSick != 1) {
+                        System.out.println("Enter 0 or 1.");
+                        return;
+                    }
 
                     Plant plant = new Plant(name, age, isTrimmed, isSick);
                     parkDao.create(plant);
@@ -68,10 +99,24 @@ public class App {
                     String newName = reader.readLine();
                     System.out.println("Enter age:");
                     String newAge = reader.readLine();
+                        try {
+                            Integer.parseInt(newAge);
+                        } catch (NumberFormatException ex) {
+                            System.out.println("Age must be a number");
+                            return;
+                        }
                     System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
                     String isNewTrimmed = reader.readLine();
+                        if (!isNewTrimmed.equals("0") && !isNewTrimmed.equals("1")) {
+                            System.out.println("Enter 0 or 1.");
+                            return;
+                    }
                     System.out.println("Is plant sick? \r\n1 - yes \r\n0 - no");
                     String isNewSick = reader.readLine();
+                        if (!isNewSick.equals("0") && !isNewSick.equals("1")) {
+                            System.out.println("Enter 0 or 1.");
+                            return;
+                    }
 
                     plantParams.put("name", newName);
                     plantParams.put("age", newAge);
