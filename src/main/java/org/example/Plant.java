@@ -12,8 +12,20 @@ public class Plant {
     public Plant(String name, int age, int is_trimmed, int is_sick) {
         this.name = name;
         this.age = age;
-        this.is_trimmed = is_trimmed;
-        this.is_sick = is_sick;
+        if (is_trimmed != 0 && is_trimmed != 1) {
+            throw new IllegalArgumentException("Is_trimmed can only be 0 or 1.");
+        }
+        else {
+            this.is_trimmed = is_trimmed;
+        }
+
+        if (is_sick != 0 && is_sick != 1) {
+            throw new IllegalArgumentException("Is_sick can only be 0 or 1.");
+        }
+        else {
+            this.is_sick = is_sick;
+        }
+
     }
 
     public String getName() {

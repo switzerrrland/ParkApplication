@@ -75,7 +75,7 @@ public class ParkDao implements Dao<Plant> {
             }
 
     }
-    //TODO: проверить последние 2 параметра на корректность, для create и для update
+
     @Override
     public void update(int id, Map<String, String> params) {//только все значения
         Optional<Plant> res = findById(id);
@@ -83,6 +83,13 @@ public class ParkDao implements Dao<Plant> {
         if (!res.isPresent()) {
             System.out.println("Plant with id = " + id + " doesn't exist");
             return;
+        }
+
+        if (params.get("is_trimmed") != "0" && params.get("is_trimmed") != "1") {
+            throw new IllegalArgumentException("Is_trimmed can only be 0 or 1.");
+        }
+        if (params.get("is_sick") != "0" && params.get("is_sick") != "1") {
+            throw new IllegalArgumentException("Is_sick can only be 0 or 1.");
         }
 
         String query = String.format(String.valueOf(UPDATE_QUERY), params.get("name"), Integer.parseInt(params.get("age")),
