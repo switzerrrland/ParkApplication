@@ -14,5 +14,5 @@ public interface Dao<T> {
 
     void update(int id, Map<String, String> params);
 
-    void deleteById(int id);
+    Plant deleteById(int id);
 }

@@ -7,7 +7,7 @@ public enum Constants {
             return "org.sqlite.JDBC";
         }
     },
-    DB_PATH {
+    PRODUCTION_DB_PATH {
         public String toString() {
             return "jdbc:sqlite:C:/Users/user/Desktop/Park.db";
         }

@@ -5,24 +5,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import static org.example.Constants.*;
 
 import static org.example.ConnectionUtils.createConnection;
-import static org.example.Constants.*;
 
 
 public class ParkDao implements Dao<Plant> {
 
-    private Connection connection = createConnection();
-    List<Plant> plants = new ArrayList<>();
-    static Statement statement;
+    private String dbPath;
+    Statement statement;
+    private Connection connection = null;
 
-    {
+    public ParkDao(String dbPath) {
+        this.dbPath = dbPath;
         try {
+            connection = createConnection(dbPath);
             statement = connection.createStatement();
         } catch (SQLException ex) {
             System.out.println("Something is wrong with database connection :(");
         }
+
     }
 
     @Override
@@ -47,6 +49,7 @@ public class ParkDao implements Dao<Plant> {
 
     @Override
     public List<Plant> findAll() throws SQLException {
+        List<Plant> plants = new ArrayList<>();
 
         ResultSet plantsTable = statement.executeQuery(String.valueOf(FIND_ALL_QUERY));
         while (plantsTable.next()) {
@@ -72,7 +75,7 @@ public class ParkDao implements Dao<Plant> {
             }
 
     }
-    //TODO: проверить последние 2 параметра на корректность
+    //TODO: проверить последние 2 параметра на корректность, для create и для update
     @Override
     public void update(int id, Map<String, String> params) {//только все значения
         Optional<Plant> res = findById(id);
@@ -94,14 +97,23 @@ public class ParkDao implements Dao<Plant> {
 
     }
 
+    protected Statement getStatement() {
+        return statement;
+    }
+
     @Override
-    public void deleteById(int id) {
+    public Plant deleteById(int id) {
+        Plant delPlant = findById(id).get();
         String query = String.format(String.valueOf(DELETE_QUERY), id);
         try {
             statement.execute(query);
         } catch (SQLException ex) {
             System.out.println("Delete failed: Plant with id = " + id + " doesn't exist");
         }
+
+        return delPlant;
+
+
 
     }
 }

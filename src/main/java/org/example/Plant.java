@@ -20,33 +20,25 @@ public class Plant {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
 
     public int getAge() {
         return age;
     }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+
 
     public int getIs_trimmed() {
         return is_trimmed;
     }
 
-    public void setIs_trimmed(int is_trimmed) {
-        this.is_trimmed = is_trimmed;
-    }
+
 
     public int getIs_sick() {
         return is_sick;
     }
 
-    public void setIs_sick(int is_sick) {
-        this.is_sick = is_sick;
-    }
+
 
     @Override
     public boolean equals(Object o) {

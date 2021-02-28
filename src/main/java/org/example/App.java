@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.*;
+import static org.example.Constants.*;
 
 public class App {
 
 
     public static void main( String[] args ) throws SQLException, IOException {
 
-        ParkDao parkDao = new ParkDao();
+        ParkDao parkDao = new ParkDao(PRODUCTION_DB_PATH.toString());
+        System.out.println(PRODUCTION_DB_PATH.toString());
 
         System.out.println("Choose your action:");
         System.out.println("1 - Create plant");

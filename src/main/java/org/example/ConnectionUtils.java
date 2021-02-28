@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.example.Constants.DB_PATH;
 import static org.example.Constants.DRIVER_NAME;
 
 public class ConnectionUtils {
     private static Connection connection;
 
-    public static Connection createConnection() {
+    public static Connection createConnection(String dbPath) {
         try {
             Class.forName(String.valueOf(DRIVER_NAME));
         } catch (ClassNotFoundException e) {
@@ -18,7 +17,7 @@ public class ConnectionUtils {
         }
 
         try {
-            connection = DriverManager.getConnection(String.valueOf(DB_PATH));
+            connection = DriverManager.getConnection(dbPath);
         } catch (SQLException e) {
             System.out.println("Can't get connection. Incorrect URL");
 
