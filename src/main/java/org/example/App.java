@@ -1,11 +1,16 @@
 package org.example;
 
+import org.example.dao.implementation.ParkDao;
+import org.example.models.Plant;
+import org.example.services.ParkService;
+import org.example.utils.ConnectionUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.*;
-import static org.example.Constants.*;
+import static org.example.utils.Constants.*;
 
 public class App {
 
@@ -13,6 +18,7 @@ public class App {
     public static void main( String[] args ) throws SQLException, IOException {
 
         ParkDao parkDao = new ParkDao(PRODUCTION_DB_PATH.toString());
+        ParkService parkService = new ParkService(parkDao);
         System.out.println(PRODUCTION_DB_PATH.toString());
 
         System.out.println("Choose your action:");
@@ -21,6 +27,7 @@ public class App {
         System.out.println("3 - Delete plant by id");
         System.out.println("4 - Update plant by id");
         System.out.println("5 - List all plants");
+        System.out.println("6 - See statistics");
         System.out.println("0 - Exit");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -70,7 +77,7 @@ public class App {
                     }
 
                     Plant plant = new Plant(name, age, isTrimmed, isSick);
-                    parkDao.create(plant);
+                    parkService.create(plant);
                     System.out.println("New plant is successfully created:\n" + plant.toString());
                     System.out.println("Anything else? Enter another command:");
 
@@ -78,15 +85,19 @@ public class App {
                 case "2":
                     System.out.println("Enter id of the plant you're looking for:");
                     int id = Integer.parseInt(reader.readLine());
-                    Plant result = parkDao.findById(id).get();
-                    System.out.println("This is your plant:\n" + result.toString());
+                    Optional<Plant> resultPlant = parkService.findById(id);
+                    if (resultPlant.isPresent()) {
+                        System.out.println("This is your plant:\n" + resultPlant.toString());
+                    }
+
+
                     System.out.println("Anything else? Enter another command:");
 
                     break;
                 case "3":
                     System.out.println("Enter id of the plant you want to delete:");
                     int plantId = Integer.parseInt(reader.readLine());
-                    parkDao.deleteById(plantId);
+                    parkService.deleteById(plantId);
                     System.out.println("Plant with id = " + plantId + " deleted");
                     System.out.println("Anything else? Enter another command:");
 
@@ -123,20 +134,23 @@ public class App {
                     plantParams.put("is_trimmed", isNewTrimmed);
                     plantParams.put("is_sick", isNewSick);
 
-                    parkDao.update(plId, plantParams);
+                    parkService.update(plId, plantParams);
                     System.out.println("Update successful");
                     System.out.println("Anything else? Enter another command:");
 
                     break;
                 case "5":
                     System.out.println("Here are all the plants:");
-                    List<Plant> allPlants = parkDao.findAll();
+                    List<Plant> allPlants = parkService.findAll();
                     for (Plant p : allPlants) {
                         System.out.println(p);
                     }
                     System.out.println("Anything else? Enter another command:");
 
-
+                    break;
+                case "6":
+                    parkService.getStatistics();
+                    System.out.println("Anything else? Enter another command:");
                     break;
                 case "0":
                     System.out.println("Okay, bye");

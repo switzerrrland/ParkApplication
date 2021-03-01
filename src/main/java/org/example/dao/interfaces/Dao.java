@@ -1,4 +1,6 @@
-package org.example;
+package org.example.dao.interfaces;
+
+import org.example.models.Plant;
 
 import java.sql.SQLException;
 import java.util.List;

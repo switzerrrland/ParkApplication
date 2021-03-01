@@ -1,5 +1,7 @@
-package org.example;
+package org.example.dao;
 
+import org.example.dao.implementation.ParkDao;
+import org.example.models.Plant;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;

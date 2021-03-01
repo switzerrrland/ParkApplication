@@ -1,13 +1,14 @@
-package org.example;
+package org.example.dao.implementation;
+
+import org.example.dao.interfaces.Dao;
+import org.example.models.Plant;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import static org.example.Constants.*;
+import java.util.*;
 
-import static org.example.ConnectionUtils.createConnection;
+import static org.example.utils.Constants.*;
+
+import static org.example.utils.ConnectionUtils.createConnection;
 
 
 public class ParkDao implements Dao<Plant> {
@@ -41,7 +42,7 @@ public class ParkDao implements Dao<Plant> {
             return Optional.of(plant);
 
         } catch (SQLException ex) {
-            System.out.println("Item with such id doesn't exist");
+            System.out.println("Plant with such id doesn't exist");
         }
 
         return Optional.empty();
@@ -85,10 +86,10 @@ public class ParkDao implements Dao<Plant> {
             return;
         }
 
-        if (params.get("is_trimmed") != "0" && params.get("is_trimmed") != "1") {
+        if (!params.get("is_trimmed").equals("0") && !params.get("is_trimmed").equals("1")) {
             throw new IllegalArgumentException("Is_trimmed can only be 0 or 1.");
         }
-        if (params.get("is_sick") != "0" && params.get("is_sick") != "1") {
+        if (!params.get("is_sick").equals("0") && !params.get("is_sick").equals("1")) {
             throw new IllegalArgumentException("Is_sick can only be 0 or 1.");
         }
 
@@ -104,7 +105,7 @@ public class ParkDao implements Dao<Plant> {
 
     }
 
-    protected Statement getStatement() {
+    public Statement getStatement() {
         return statement;
     }
 

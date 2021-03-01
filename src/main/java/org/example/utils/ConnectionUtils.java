@@ -1,10 +1,10 @@
-package org.example;
+package org.example.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import static org.example.Constants.DRIVER_NAME;
+import static org.example.utils.Constants.DRIVER_NAME;
 
 public class ConnectionUtils {
     private static Connection connection;
