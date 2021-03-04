@@ -1,6 +1,7 @@
 package org.example.dao.implementation;
 
 import org.example.dao.interfaces.Dao;
+import org.example.models.Forester;
 import org.example.models.Plant;
 
 import java.sql.*;
@@ -67,22 +68,28 @@ public class ParkDao implements Dao<Plant> {
     }
 
     @Override
-    public void create(Plant plant) {
+    public void create(int foresterId, Plant plant) {
+
+        //Forester forester = findForesterById(foresterId).get();
         String query = String.format(String.valueOf(INSERT_QUERY), plant.getName(), plant.getAge(), plant.getIs_trimmed(), plant.getIs_sick());
         try {
             statement.execute(query);
+            ResultSet plantIdRes = statement.executeQuery("select max(id) as max_id from plants");
+            int plantId = plantIdRes.getInt("max_id");
+            String historyQuery = String.format(String.valueOf(INSERT_HISTORY_QUERY), foresterId, plantId, "create");
+            statement.execute(historyQuery);
         } catch (SQLException ex) {
             System.out.println("Insertion failure");
-            }
+        }
 
     }
 
     @Override
-    public void update(int id, Map<String, String> params) {//только все значения
-        Optional<Plant> res = findById(id);
+    public void update(int foresterId, int plantId, Map<String, String> params) {//только все значения
+        Optional<Plant> res = findById(plantId);
 
         if (!res.isPresent()) {
-            System.out.println("Plant with id = " + id + " doesn't exist");
+            System.out.println("Plant with id = " + plantId + " doesn't exist");
             return;
         }
 
@@ -93,13 +100,16 @@ public class ParkDao implements Dao<Plant> {
             throw new IllegalArgumentException("Is_sick can only be 0 or 1.");
         }
 
-        String query = String.format(String.valueOf(UPDATE_QUERY), params.get("name"), Integer.parseInt(params.get("age")),
-                Integer.parseInt(params.get("is_trimmed")), Integer.parseInt(params.get("is_sick")), id);
+        String query = String.format(String.valueOf(UPDATE_QUERY), res.get().getName(), res.get().getAge(),
+                Integer.parseInt(params.get("is_trimmed")), Integer.parseInt(params.get("is_sick")), plantId);
+
 
         try {
             statement.execute(query);
+            String historyQuery = String.format(String.valueOf(INSERT_HISTORY_QUERY), foresterId, plantId, "update");
+            statement.execute(historyQuery);
         } catch (SQLException ex) {
-            System.out.println("Update failed: Plant with id = " + id + " doesn't exist");
+            System.out.println("Update failed: Plant with id = " + plantId + " doesn't exist");
         }
 
 
@@ -110,18 +120,74 @@ public class ParkDao implements Dao<Plant> {
     }
 
     @Override
-    public Plant deleteById(int id) {
-        Plant delPlant = findById(id).get();
-        String query = String.format(String.valueOf(DELETE_QUERY), id);
+    public Plant delete(int foresterId, int plantId) {
+
+        Plant delPlant = findById(plantId).get();
+        String query = String.format(String.valueOf(DELETE_QUERY), plantId);
         try {
             statement.execute(query);
+            String historyQuery = String.format(String.valueOf(INSERT_HISTORY_QUERY), foresterId, plantId, "delete");
+            statement.execute(historyQuery);
+
         } catch (SQLException ex) {
-            System.out.println("Delete failed: Plant with id = " + id + " doesn't exist");
+            System.out.println("Delete failed: Plant with id = " + plantId + " doesn't exist");
         }
 
         return delPlant;
 
+    }
 
+    public Optional<Forester> findForesterById(int id) {
+        String query = String.format(String.valueOf(FIND_BY_ID_QUERY),id);
+        try {
+            ResultSet forestersTable = statement.executeQuery(query);
+            String firstName = forestersTable.getString("first_name");
+            String lastName = forestersTable.getString("last_name");
+            String middleName = forestersTable.getString("middle_name");
+            String phoneNumber = forestersTable.getString("phone_number");
+            String dateOfBirth = forestersTable.getString("date_of_birth");
 
+            Forester forester = new Forester(firstName, lastName, middleName, phoneNumber, dateOfBirth);
+            return Optional.of(forester);
+
+        } catch (SQLException ex) {
+            System.out.println("Plant with such id doesn't exist");
+        }
+
+        return Optional.empty();
+    }
+
+    public List<Forester> findAllForesters() throws SQLException {
+        List<Forester> foresters = new ArrayList<>();
+
+        ResultSet forestersTable = statement.executeQuery("select * from foresters");
+        while (forestersTable.next()) {
+
+            String firstName = forestersTable.getString("first_name");
+            String lastName = forestersTable.getString("last_name");
+            String middleName = forestersTable.getString("middle_name");
+            String phoneNumber = forestersTable.getString("phone_number");
+            String dateOfBirth = forestersTable.getString("date_of_birth");
+
+            Forester forester = new Forester(firstName, lastName, middleName, phoneNumber, dateOfBirth);
+            foresters.add(forester);
+        }
+        return foresters;
+    }
+
+    public List<String> getHistory() throws SQLException {
+
+        List<String> historyRecords = new ArrayList<>();
+
+        ResultSet historyResultSet = statement.executeQuery("select * from history");
+        while (historyResultSet.next()) {
+            int foresterId = historyResultSet.getInt("forester_id");
+            int plantId = historyResultSet.getInt("plant_id");
+            String action = historyResultSet.getString("action");
+
+            historyRecords.add(foresterId + " " + plantId + " " + action);
+        }
+
+        return historyRecords;
     }
 }

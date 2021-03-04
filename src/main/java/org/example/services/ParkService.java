@@ -1,6 +1,7 @@
 package org.example.services;
 
 import org.example.dao.implementation.ParkDao;
+import org.example.models.Forester;
 import org.example.models.Plant;
 
 import java.sql.SQLException;
@@ -8,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.example.utils.Constants.PRODUCTION_DB_PATH;
 
 public class ParkService {
 
@@ -27,16 +26,16 @@ public class ParkService {
         return dao.findAll();
     }
 
-    public void create (Plant plant) {
-        dao.create(plant);
+    public void create(int foresterId, Plant plant) {
+        dao.create(foresterId, plant);
     }
 
-    public void update(int id, Map<String, String> params) {
-        dao.update(id, params);
+    public void update(int foresterId, int plantId, Map<String, String> params) {
+        dao.update(foresterId, plantId, params);
     }
 
-    public Plant deleteById(int id) {
-        return dao.deleteById(id);
+    public Plant deletePlant(int foresterId, int plantId) {
+        return dao.delete(foresterId, plantId);
     }
     public void getStatistics() throws SQLException {
 
@@ -66,6 +65,14 @@ public class ParkService {
 
         return allPlants.stream().filter(plant -> plant.getAge() >= 20).collect(Collectors.toList());
 
+    }
+
+    public List<Forester> findAllForesters() throws SQLException {
+        return dao.findAllForesters();
+    }
+
+    public List<String> getHistory() throws SQLException {
+        return dao.getHistory();
     }
 
 

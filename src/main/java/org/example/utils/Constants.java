@@ -24,6 +24,13 @@ public enum Constants {
             return "INSERT INTO plants (name,age,is_trimmed,is_sick) VALUES ('%s', %d, %d, %d);";
         }
     },
+    INSERT_HISTORY_QUERY {
+
+        public String toString() {
+
+            return "INSERT INTO history (forester_id, plant_id, action) VALUES (%d, %d, '%s');";
+        }
+    },
     DELETE_QUERY {
         public String toString() {
             return "DELETE FROM plants WHERE id=%d";
@@ -39,9 +46,5 @@ public enum Constants {
             return "UPDATE plants SET name = '%s', age = %d, is_trimmed = %d, is_sick = %d WHERE id=%d;";
         }
     }
-
-
-
-
 
 }

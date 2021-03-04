@@ -19,6 +19,9 @@ public class ParkServiceTest {
 
     Statement statement = dao.getStatement();
 
+    public ParkServiceTest() throws SQLException {
+    }
+
     @BeforeMethod
     public void fillTestDb() throws SQLException {
 

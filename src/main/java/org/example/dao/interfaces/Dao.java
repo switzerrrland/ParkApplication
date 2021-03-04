@@ -12,9 +12,9 @@ public interface Dao<T> {
 
     List<T> findAll() throws SQLException;
 
-    void create(T t);
+    void create(int id, T t);
 
-    void update(int id, Map<String, String> params);
+    void update(int id1, int id2, Map<String, String> params);
 
-    Plant deleteById(int id);
+    T delete(int id1, int id2);
 }
