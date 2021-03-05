@@ -122,7 +122,7 @@ public class ParkDao implements Dao<Plant> {
     @Override
     public Plant delete(int foresterId, int plantId) {
 
-        Plant delPlant = findById(plantId).get();
+        Plant delPlant = findById(plantId).get();//NoSuchElementException: No value present
         String query = String.format(String.valueOf(DELETE_QUERY), plantId);
         try {
             statement.execute(query);

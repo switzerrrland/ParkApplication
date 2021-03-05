@@ -1,0 +1,7 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "history" (
+	"forester_id"	INTEGER NOT NULL,
+	"plant_id"	INTEGER NOT NULL,
+	"action"	TEXT NOT NULL
+);
+COMMIT;

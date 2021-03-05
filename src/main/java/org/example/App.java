@@ -48,7 +48,7 @@ public class App {
                     System.out.println("1 - " + f1.getFirstName() + " " + f1.getMiddleName() + " " + f1.getLastName() );
                     System.out.println("2 - " + f2.getFirstName() + " " + f2.getMiddleName() + " " + f2.getLastName() );
                     System.out.println("3 - " + f3.getFirstName() + " " + f3.getMiddleName() + " " + f3.getLastName() );
-                    System.out.println("0 - return to previous menu");
+                    System.out.println("0 - Return to previous menu");
 
                     foresterId = Integer.parseInt(reader.readLine());
 
@@ -102,20 +102,25 @@ public class App {
 
                             break;
                         default:
-                            System.out.println("Wrong id!");
+                            System.out.println("Wrong forester id!");
+                            return;
                     }
 
                     break;
                 case "2":
                     System.out.println("Enter id of the plant you're looking for:");
-                    int id = Integer.parseInt(reader.readLine());
-                    Optional<Plant> resultPlant = parkService.findById(id);
-                    if (resultPlant.isPresent()) {
-                        System.out.println("This is your plant:\n" + resultPlant.toString());
+                    try {
+                        int id = Integer.parseInt(reader.readLine());
+                        Optional<Plant> resultPlant = parkService.findById(id);
+                        if (resultPlant.isPresent()) {
+                            System.out.println("This is your plant:\n" + resultPlant.toString());
+                        }
+                        System.out.println("Anything else? Enter another command:");
+                    } catch (NumberFormatException ex) {
+                        System.out.println("Enter a number");
+                        return;
                     }
 
-
-                    System.out.println("Anything else? Enter another command:");
 
                     break;
                 case "3":
@@ -125,7 +130,7 @@ public class App {
                     System.out.println("1 - " + f1.getFirstName() + " " + f1.getMiddleName() + " " + f1.getLastName() );
                     System.out.println("2 - " + f2.getFirstName() + " " + f2.getMiddleName() + " " + f2.getLastName() );
                     System.out.println("3 - " + f3.getFirstName() + " " + f3.getMiddleName() + " " + f3.getLastName() );
-                    System.out.println("0 - return to previous menu");
+                    System.out.println("0 - Return to previous menu");
 
                     foresterId = Integer.parseInt(reader.readLine());
 
@@ -133,17 +138,23 @@ public class App {
 
                         case 1,2,3:
                             System.out.println("Enter id of the plant you want to delete:");
-                            int plantId = Integer.parseInt(reader.readLine());
-                            parkService.deletePlant(foresterId, plantId);
-                            System.out.println("Plant with id = " + plantId + " deleted");
-                            System.out.println("Anything else? Enter another command:");
-
+                            try {
+                                int plantId = Integer.parseInt(reader.readLine());
+                                Optional<Plant> resultPlant = parkService.findById(plantId);
+                                if (resultPlant.isPresent()) {
+                                    parkService.deletePlant(foresterId, plantId);
+                                    System.out.println("Plant with id = " + plantId + " deleted");
+                                }
+                                System.out.println("Anything else? Enter another command:");
+                            } catch (NumberFormatException ex) {
+                                System.out.println("Enter a number");
+                                return;
+                            }
                             break;
 
                         default:
                             System.out.println("Wrong forester id!");
-                            break;
-
+                            return;
                     }
 
                     break;
@@ -154,7 +165,7 @@ public class App {
                     System.out.println("1 - " + f1.getFirstName() + " " + f1.getMiddleName() + " " + f1.getLastName() );
                     System.out.println("2 - " + f2.getFirstName() + " " + f2.getMiddleName() + " " + f2.getLastName() );
                     System.out.println("3 - " + f3.getFirstName() + " " + f3.getMiddleName() + " " + f3.getLastName() );
-                    System.out.println("0 - return to previous menu");
+                    System.out.println("0 - Return to previous menu");
 
                     foresterId = Integer.parseInt(reader.readLine());
 
@@ -162,35 +173,57 @@ public class App {
 
                         case 1,2,3:
                             System.out.println("Enter id of the plant you want to update:");
+                            try {
+                                int plId = Integer.parseInt(reader.readLine());
+                                Optional<Plant> resultPlant = parkService.findById(plId);
+                                if (resultPlant.isPresent()) {
+                                    Map<String, String> plantParams = new HashMap<>();
 
-                            int plId = Integer.parseInt(reader.readLine());
-                            Map<String, String> plantParams = new HashMap<>();
+                                    System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
+                                    Integer isNewTrimmed = null;
+                                    try {
+                                        isNewTrimmed = Integer.parseInt(reader.readLine());
+                                    } catch (NumberFormatException ex) {
+                                        System.out.println("Enter a number");
+                                        return;
+                                    }
 
-                            System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
-                            String isNewTrimmed = reader.readLine();
-                            if (!isNewTrimmed.equals("0") && !isNewTrimmed.equals("1")) {
-                                System.out.println("Enter 0 or 1.");
+                                    if (isNewTrimmed != 0 && isNewTrimmed != 1) {
+                                        System.out.println("Enter 0 or 1.");
+                                        return;
+                                    }
+                                    System.out.println("Is plant sick? \r\n1 - yes \r\n0 - no");
+                                    Integer isNewSick = null;
+                                    try {
+                                        isNewSick = Integer.parseInt(reader.readLine());
+                                    } catch (NumberFormatException ex) {
+                                        System.out.println("Enter a number");
+                                        return;
+                                    }
+                                    if (isNewSick != 0 && isNewSick != 1) {
+                                        System.out.println("Enter 0 or 1.");
+                                        return;
+                                    }
+
+                                    plantParams.put("is_trimmed", String.valueOf(isNewTrimmed));
+                                    plantParams.put("is_sick", String.valueOf(isNewSick));
+
+                                    parkService.update(foresterId, plId, plantParams);
+                                    System.out.println("Update successful");
+                                }
+
+                                System.out.println("Anything else? Enter another command:");
+
+                            } catch (NumberFormatException ex) {
+                                System.out.println("Enter a number");
                                 return;
                             }
-                            System.out.println("Is plant sick? \r\n1 - yes \r\n0 - no");
-                            String isNewSick = reader.readLine();
-                            if (!isNewSick.equals("0") && !isNewSick.equals("1")) {
-                                System.out.println("Enter 0 or 1.");
-                                return;
-                            }
-
-                            plantParams.put("is_trimmed", isNewTrimmed);
-                            plantParams.put("is_sick", isNewSick);
-
-                            parkService.update(foresterId, plId, plantParams);
-                            System.out.println("Update successful");
-                            System.out.println("Anything else? Enter another command:");
 
                             break;
 
                         default:
                             System.out.println("Incorrect forester id!");
-                            break;
+                            return;
 
                     }
 
