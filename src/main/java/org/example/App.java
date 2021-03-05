@@ -179,7 +179,7 @@ public class App {
                                 if (resultPlant.isPresent()) {
                                     Map<String, String> plantParams = new HashMap<>();
 
-                                    System.out.println("Is plant trimmed? \r\n1 - yes \r\n0 - no");
+                                    System.out.println("Is plant trimmed now? \r\n1 - yes \r\n0 - no");
                                     Integer isNewTrimmed = null;
                                     try {
                                         isNewTrimmed = Integer.parseInt(reader.readLine());
@@ -192,7 +192,7 @@ public class App {
                                         System.out.println("Enter 0 or 1.");
                                         return;
                                     }
-                                    System.out.println("Is plant sick? \r\n1 - yes \r\n0 - no");
+                                    System.out.println("Is plant sick now? \r\n1 - yes \r\n0 - no");
                                     Integer isNewSick = null;
                                     try {
                                         isNewSick = Integer.parseInt(reader.readLine());
